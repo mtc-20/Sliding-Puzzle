@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel="stylesheet" href="style.css" media="screen">
+
+		<title>Sliding Tile Puzzle</title>
+	</head>
+
+	<body>
+		<h1>A Sliding Puzzle Solver</h1>
+		<div class="container">
+			<div class="grid-container">
+				<h2>Initial Config</h2>
+				<div class="grid start">
+					<div class="row">
+						<div class="cell" data-pos="0,0"><span>6</span></div>
+						<div class="cell" data-pos="0,1"><span>4</span></div>
+						<div class="cell" data-pos="0,2"><span>7</span></div>
+					</div>
+					<div class="row">
+						<div class="cell" data-pos="1,0"><span>8</span></div>
+						<div class="cell" data-pos="1,1"><span>5</span></div>
+						<div class="cell" data-pos="1,2" id="empty"></div>
+					</div>
+					<div class="row">
+						<div class="cell" data-pos="2,0"><span>3</span></div>
+						<div class="cell" data-pos="2,1"><span>2</span></div>
+						<div class="cell" data-pos="2,2"><span>1</span></div>
+					</div>
+				</div>
+				
+				<div class="solver">
+
+					<label for="heuristic">Choose a heuristic for the A-star algorithm based solver: </label>
+					<select name="heuristic" id="heuristic">
+						<option value="mis">Misplaced Tiles</option>
+						<option value="man">Manhattan Distance</option>
+						<option value="lin">Linear Conflict</option>
+					</select>
+					<div>
+						<button onclick="start()"> Solve</button>
+						<button onclick="showSolution()"> Show Step</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid-container">
+				<h2>Goal Config</h2>
+				<div class="grid goal">
+					<div class="row">
+						<div class="cell"><span>1</span></div>
+						<div class="cell"><span>2</span></div>
+						<div class="cell"><span>3</span></div>
+					</div>
+					<div class="row">
+						<div class="cell"><span>4</span></div>
+						<div class="cell"><span>5</span></div>
+						<div class="cell"><span>6</span></div>
+					</div>
+					<div class="row">
+						<div class="cell"><span>7</span></div>
+						<div class="cell"><span>8</span></div>
+						<div class="cell" id="empty"></div>
+						<!-- <div class="cell" data-pos="2,2"><span>1</span></div> -->
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		
+		<div id="panel">
+
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+		<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/js-priority-queue@0.1.5/priority-queue.min.js"></script>
+		<script type="text/javascript" src="js/hashset.js"></script>
+		<script type="text/javascript" src="js/hashtable.js"></script>
+		<script type="text/javascript" src="index.js"></script>
+	</body>
+</html>
