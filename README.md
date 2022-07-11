@@ -15,9 +15,49 @@ But didn't take too long to debug. Once it was working,
 - made it "more dynamic" so that the solver always takes in the latest state of the puzzle to solve
 - provided a dropdonw list to choose which heurestic to use for the solver
 
+## Valid randomizer
+
+While looking up ways to shuffle the tiles, came across this repo by [@danishmughal][valid-random] which does the whole thing quite beautifully. So, my implementation is based on this.
+
+My original idea was to just shuffle the 2D array, for which I had come across these two nice stack overflow responses - [Knuth Shuffle in JS][shuffle] and [Array.reduce][reduce]. However, I liked Danish idea more, hence didn't get around to fully implementing these two. However, here's a code snippet:
+```js
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+// Assume this is the starting state of grid
+start_arr = [[6,4,7], [8,5,0], [3,2,1]]
+// First reduce to 1D array
+const arr1D = start_arr.reduce((a,b) => [...a, ...b], [])
+console.log(arr1D)
+// Shuffle this 1D array
+shuffleTiled = shuffle(arr1D)
+// Now reduce shuffled array back to original shape
+shuffleTile2D = shuffleTiled.reduce((acc,i) => {
+	if(acc[acc.length-1].length>=3) {
+		acc.push([])
+	}
+	acc[acc.length-1].push(i)
+	return acc
+}, [[]])
+console.log(shuffleTile2D)
+```
 ## TODO
 - [ ] ### Solver
-- [ ] ### Valid randomizer<sup>[1][valid-random]</sup>
 - [ ] ### User images
 - [ ] Deploy
 
@@ -25,3 +65,5 @@ But didn't take too long to debug. Once it was working,
 
 [smashing]: https://www.smashingmagazine.com/2016/02/javascript-ai-html-sliding-tiles-puzzle/
 [valid-random]: https://github.com/danishmughal/sliding-puzzle
+[reduce]: https://stackoverflow.com/questions/52241641/shuffling-multidimensional-array-in-js
+[shuffle]: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array

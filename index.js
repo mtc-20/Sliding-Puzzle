@@ -11,6 +11,7 @@ function moveTile() {
 	var posRow = parseInt(pos.split(',')[0]);
 	var posCol = parseInt(pos.split(',')[1]);
 
+	// Move tile down
 	if (posRow + 1 == emptyTileRow && posCol == emptyTileCol) {
 		$(this).animate({
 			'top': "+=" + cellDisplacement
@@ -24,6 +25,7 @@ function moveTile() {
 		$(this).attr('data-pos', (posRow+1) + "," + posCol);
 	}
 
+	// Move tile up
 	if (posRow - 1 == emptyTileRow && posCol == emptyTileCol) {
 		$(this).animate({
 			'top': "-=" + cellDisplacement
@@ -37,20 +39,21 @@ function moveTile() {
 		$(this).attr('data-pos', (posRow-1) + "," + posCol);
 	}
 
-
+	// Move tile right
 	if (posRow == emptyTileRow && posCol + 1 == emptyTileCol) {
 		$(this).animate({
-			'right': "-=" + cellDisplacement
+			'right': "-=" + cellDisplacement // move right
 		});
 		
 		$('#empty').animate({
-			'right': "+=" + cellDisplacement
+			'right': "+=" + cellDisplacement // move left
 		});
 		
 		emptyTileCol -= 1;
 		$(this).attr('data-pos', posRow + "," + (posCol + 1));
 	}
 
+	// Move tile left
 	if (posRow == emptyTileRow && posCol - 1 == emptyTileCol) {
 		$(this).animate({
 			'right': "+=" + cellDisplacement
@@ -70,7 +73,7 @@ function moveTile() {
 // $('.cell').click(function() {
 // 	alert($(this).attr('data-pos'))
 // })
-$('.cell').click(moveTile)
+$('.start .cell').click(moveTile)
 
 
 /**
@@ -148,6 +151,7 @@ AStar.prototype.expandNode = function(node) {
 	var row = node.emptyRow
 	var newNode 
 
+	// Up
 	if (row > 0) {
 		newState = node.state.clone()
 		temp = newState[row-1][col]
@@ -163,6 +167,7 @@ AStar.prototype.expandNode = function(node) {
 		}
 	}
 	
+	// Down
 	if (row < node.size -1) {
 		newState = node.state.clone()
 		temp = newState[row+1][col]
@@ -178,6 +183,7 @@ AStar.prototype.expandNode = function(node) {
 		}
 	}
 	
+	// Left
 	if (col > 0) {
 		newState = node.state.clone()
 		temp = newState[row][col-1]
@@ -193,6 +199,7 @@ AStar.prototype.expandNode = function(node) {
 		}
 	}
 	
+	// Right
 	if (col < node.size -1) {
 		newState = node.state.clone()
 		temp = newState[row][col +1]
@@ -220,28 +227,44 @@ AStar.prototype.heuristic = function(node) {
 	else if (heur == "lin") return this.manhattanDistance(node) + this.linearConflicts(node)
 }
 
+function getCurrentTileState() {
+	tileState = [[],[],[]]
+
+	$(".start .cell").each(function(i, obj) {
+		// console.log(i,$(this).find("span").text())
+		temp_pos = $(this).attr("data-pos")
+		i = parseInt(temp_pos.split(',')[0])
+		j = parseInt(temp_pos.split(',')[1])
+		val_str = ($(this).find("span").text() != '') ? parseInt($(this).find("span").text()) : 0
+		// console.log(val_str)
+		tileState[i][j] = val_str
+	})
+	return tileState
+}
+
 function start() {
 	heur = $("#heuristic :selected").val()
 	// console.log(heur)
 	emptyPos = $("#empty").attr("data-pos")
 	console.log(emptyPos)
 	emptyTileRow = parseInt(emptyPos.split(',')[0]);
-	emptyTileCol = parseInt(emptyPos.split(',')[1]);;
+	emptyTileCol = parseInt(emptyPos.split(',')[1]);
 	console.log(emptyTileRow + ',' + emptyTileCol)
 
-	initial_arr = [[],[],[]]
-	initial_arr[0][0] = 1
-	initial_arr[1][0] = 1
-	console.log(initial_arr)
-	$(".start .cell").each(function(i, obj) {
-		console.log(i,$(this).find("span").text())
-		temp_pos = $(this).attr("data-pos")
-		i = parseInt(temp_pos.split(',')[0])
-		j = parseInt(temp_pos.split(',')[1])
-		val_str = ($(this).find("span").text() != '') ? parseInt($(this).find("span").text()) : 0
-		// console.log(val_str)
-		initial_arr[i][j] = val_str
-	})
+	// initial_arr = [[],[],[]]
+	// initial_arr[0][0] = 1
+	// initial_arr[1][0] = 1
+	// console.log(initial_arr)
+	// $(".start .cell").each(function(i, obj) {
+	// 	// console.log(i,$(this).find("span").text())
+	// 	temp_pos = $(this).attr("data-pos")
+	// 	i = parseInt(temp_pos.split(',')[0])
+	// 	j = parseInt(temp_pos.split(',')[1])
+	// 	val_str = ($(this).find("span").text() != '') ? parseInt($(this).find("span").text()) : 0
+	// 	// console.log(val_str)
+	// 	initial_arr[i][j] = val_str
+	// })
+	initial_arr = getCurrentTileState()
 
 	console.log(initial_arr)
 
@@ -364,4 +387,66 @@ function showSolution() {
 						panel.innerHTML += 'Step: ' + step + ' -> ' + solution[step] + ','
 						step++
 		}
+}
+
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
+
+function movementMap(dataPos) {
+	if (dataPos == "0,0") return ["0,1","1,0"]
+	if (dataPos == "0,1") return ["0,0","0,2","1,1"]
+	if (dataPos == "0,2") return ["0,1","1,2"]
+	if (dataPos == "1,0") return ["0,0","1,1","2,0"]
+	if (dataPos == "1,1") return ["0,1","1,0","1,2","2,1"]
+	if (dataPos == "1,2") return ["0,2","1,1","2,1"]
+	if (dataPos == "2,0") return ["1,0","2,1"]
+	if (dataPos == "2,1") return ["0,0","1,1","2,2"]
+	if (dataPos == "2,2") return ["2,1","1,2"]
+}
+
+function shuffleTiles() {
+	// start_arr = [[6,4,7], [8,5,0], [3,2,1]]
+	// const arr1D = start_arr.reduce((a,b) => [...a, ...b], [])
+	// console.log(arr1D)
+	// shuffleTiled = shuffle(arr1D)
+	// shuffleTile2D = shuffleTiled.reduce((acc,i) => {
+	// 	if(acc[acc.length-1].length>=3) {
+	// 		acc.push([])
+	// 	}
+	// 	acc[acc.length-1].push(i)
+	// 	return acc
+	// }, [[]])
+	// console.log(shuffleTile2D)
+
+	var shuffleCounter = 0;
+	var lastShuffled;
+	while (shuffleCounter < 20) {
+		emptyPos = $("#empty").attr("data-pos")
+		validTiles = movementMap(emptyPos)
+		randomPos = validTiles[Math.floor(Math.random()*validTiles.length)]
+		console.log($("div[data-pos='"+randomPos+"']").find("span").text())
+		if (lastShuffled != randomPos) {
+			console.log(randomPos)
+			shuffleCounter++;
+			lastShuffled = randomPos
+			$("div[data-pos='"+randomPos+"']").click()
+
+		}
+	}
+
 }

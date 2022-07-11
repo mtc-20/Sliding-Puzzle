@@ -1,8 +1,9 @@
 html {
-	background-color: rgb(7, 7, 94);
-	color: #d8d8dd;
+	background-color: rgb(77, 119, 174);
+	color: azure;
 }
 h1 {
+	font-weight: bold;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	text-align: center;
 }
@@ -10,16 +11,21 @@ h1 {
 	width: 1024px;
 	margin-left: auto;
 	margin-right: auto;
-	min-height: 380px;
+	min-height: 400px;
 	max-width: 100%;
+	align-items: center;
+	/* display: flex; */
 }
 
 .grid-container {
-	float: left;
+	float:	left;
 	width: 210px;
 	min-height: 250px;
 	text-align: center;
 	width: 50%;
+	display: table;
+	margin: auto;
+	
 }
 
 .grid-container h2 {
@@ -37,26 +43,49 @@ h1 {
 	box-shadow: 5px 5px rgb(6, 6, 165), 5px 5px #0c0c24;
 	overflow: auto;
 	color: navy;
+	background-color: rgb(77, 119, 174);
 }
 
 .row {
+	width: 100%;
 	height: 33.3%;
+	align-items: center;
+	justify-content: center;
+	align-content: center;
 }
 
 .cell {
-	width: 68px;
-	height: 68px;
+	/* width: 68px;
+	height: 68px; */
+	width: 31%;
+	height: 93%;
 	float: left;
 	text-align: center;
 	font-size: 150%;
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	position: relative;
+	border-radius: 7.5px;
+	background-color: #d8d8dd;
+	margin: 2px;
+	justify-content: center;
+	box-sizing: border-box;
+
 	/* border: solid black .5px; */
+}
+
+#empty {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.start .cell {
+	cursor: pointer;
+
 }
 
 .cell:hover {
 	background-color: rgb(221, 221, 221);
+	background-color: white;
 }
 
 .cell span {
@@ -68,18 +97,54 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	padding-top: 10px;
+	padding-bottom: 5px;
 }
 
 .solver div{
 	padding: 5px;
+	min-height: 50px;
 }
+
+.solver button{
+	min-height: 40px;
+	min-width: 50px;
+	border-radius: 2px;
+	border-width: 0px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#solveButton {
+	background-color: rgb(249, 90, 0);
+	color: azure	;
+}
+
+#solveButon:hover {
+	background-color: rgb(255, 149, 1);
+	/* cursor: pointer; */
+	/* background-color: white; */
+}
+
+#shuffleButton {
+	background-color: rgb(11, 166, 0);
+	color: azure	;
+}
+
 
 #panel {
 	width: 100%;
-	background-color: navy;
+	background-color: rgb(7,7,94);
 	min-height: 100px;
 	color: white;
 	font-weight: bold;
+	margin: auto;
 	padding: 5px;
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@media only screen and (max-width: 800px) {
+	#goal {
+			display: none;
+	}
 }
