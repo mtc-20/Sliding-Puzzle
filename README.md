@@ -1,6 +1,8 @@
 # Sliding Puzzle
 A sliding puzzle solver in pure javascript, based on [this Smashing magazine article][smashing].
 
+![Screenshot of Sliding solver page](http://free.pagepeeker.com/v2/thumbs.php?size=x&url=https%3A%2F%2Fmtc-20.github.io%2FSliding-Puzzle)
+
 The idea started as just wanting to create a simple sliding puzzle gamepage where users 
 - could try and solve a 9x9 puzzle whose contents would be randomized everytime.
 - could upload their own image, 
