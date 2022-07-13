@@ -1,13 +1,21 @@
 var emptyTileRow = 1;
 var emptyTileCol = 2;
 var cellDisplacement = "69px";
+var goal_arr = [[1,2,3], [4,5,6], [7,8,0]]
 heur = "mis"
+
+var grid = document.getElementById("confetti")
+// document.body.appendChild(grid);
+
+isWin = false
+isShuffle = false
+isDebug = false
 
 
 
 function moveTile() {
 	var pos = $(this).attr('data-pos');
-	// console.log(pos)
+	if(isDebug) console.log(pos)
 	var posRow = parseInt(pos.split(',')[0]);
 	var posCol = parseInt(pos.split(',')[1]);
 
@@ -68,6 +76,9 @@ function moveTile() {
 	}
 
 	$('#empty').attr('data-pos', emptyTileRow + "," + emptyTileCol)
+	
+	// party.confetti(grid)
+	if (!isShuffle) checkWinState()
 }
 
 // $('.cell').click(function() {
@@ -246,10 +257,10 @@ function start() {
 	heur = $("#heuristic :selected").val()
 	// console.log(heur)
 	emptyPos = $("#empty").attr("data-pos")
-	console.log(emptyPos)
+	// console.log(emptyPos)
 	emptyTileRow = parseInt(emptyPos.split(',')[0]);
 	emptyTileCol = parseInt(emptyPos.split(',')[1]);
-	console.log(emptyTileRow + ',' + emptyTileCol)
+	// console.log(emptyTileRow + ',' + emptyTileCol)
 
 	// initial_arr = [[],[],[]]
 	// initial_arr[0][0] = 1
@@ -265,11 +276,10 @@ function start() {
 	// 	initial_arr[i][j] = val_str
 	// })
 	initial_arr = getCurrentTileState()
-
-	console.log(initial_arr)
+	if (isDebug) console.log(initial_arr)
 
 	var init = new ANode(0,initial_arr,emptyTileRow,emptyTileCol,0)
-	var goal = new ANode(0, [[1,2,3], [4,5,6], [7,8,0]],2,2,0)
+	var goal = new ANode(0, goal_arr,2,2,0)
 	var astar = new AStar(init, goal, 0)
 	
 	var startTime = new Date()
@@ -435,6 +445,7 @@ function shuffleTiles() {
 
 	var shuffleCounter = 0;
 	var lastShuffled;
+	isShuffle = true
 	while (shuffleCounter < 20) {
 		emptyPos = $("#empty").attr("data-pos")
 		validTiles = movementMap(emptyPos)
@@ -448,5 +459,31 @@ function shuffleTiles() {
 
 		}
 	}
+	isShuffle=false
+}
 
+function checkWinCondition() {
+	var tilePos = getCurrentTileState()
+	for (var i=0; i<3;i++){
+		for (var j=0; j<3;j++) {
+			if (tilePos[i][j] != goal_arr[i][j]) return false
+		}
+	}
+	console.log(tilePos)
+	return true
+}
+
+function checkWinState() {
+	isWin = checkWinCondition()
+	if (isDebug) isWin = true
+	if (isWin == true) {
+		var winConfetti = confetti.create(grid, {resize: true})
+		grid.style.zIndex=2
+		console.log("Win!!!")
+		winConfetti({spread: 180, ticks: 500})
+		setTimeout(() => {
+			winConfetti.reset();
+			grid.style.zIndex=-1
+		}, 2000);
+	}
 }

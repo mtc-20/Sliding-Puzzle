@@ -17,6 +17,12 @@ h1 {
 	/* display: flex; */
 }
 
+.container canvas{
+	position: absolute;
+	width: 100%;
+	z-index: -1;
+}
+
 .grid-container {
 	float:	left;
 	width: 210px;

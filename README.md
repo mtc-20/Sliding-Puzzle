@@ -61,11 +61,16 @@ console.log(shuffleTile2D)
 ## TODO
 - [ ] ### Solver
 - [ ] ### User images
-- [ ] Deploy
+- [x] Deploy
+- [x] Add animation when solution/goal reached
 
-
+### Credits and References
+- [Canvas confetti][confetti]
+- [Hashset and hashtable][hash]
 
 [smashing]: https://www.smashingmagazine.com/2016/02/javascript-ai-html-sliding-tiles-puzzle/
 [valid-random]: https://github.com/danishmughal/sliding-puzzle
 [reduce]: https://stackoverflow.com/questions/52241641/shuffling-multidimensional-array-in-js
 [shuffle]: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+[confetti]: https://github.com/catdad/canvas-confetti
+[hash]: https://www.dropbox.com/s/0v7lbn9xxofj9vw/sliding%20tiles%20puzzle.rar?dl=0&file_subpath=%2Fjs
