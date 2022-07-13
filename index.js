@@ -142,12 +142,14 @@ function AStar(initial, goal, empty) {
 
 AStar.prototype.execute = function () {
 	this.visited.add(this.initial.strRepresentation)
-	// console.log(this.goal.strRepresentation)
+	// console.log(this.visited)
 	while (this.queue.length > 0) {
 		var current = this.queue.dequeue()
+		if (isDebug) console.log("currenRep:" + current.strRepresentation )
 		
 		// console.log(current.strRepresentation)
 		if (current.strRepresentation == this.goal.strRepresentation) {
+			
 			console.log("Soln found!")
 			return current
 		}
@@ -254,10 +256,12 @@ function getCurrentTileState() {
 }
 
 function start() {
+	isWin = false
+	step = 0
 	heur = $("#heuristic :selected").val()
 	// console.log(heur)
 	emptyPos = $("#empty").attr("data-pos")
-	// console.log(emptyPos)
+	if (isDebug) console.log("emptyPos: " + emptyPos)
 	emptyTileRow = parseInt(emptyPos.split(',')[0]);
 	emptyTileCol = parseInt(emptyPos.split(',')[1]);
 	// console.log(emptyTileRow + ',' + emptyTileCol)
@@ -276,7 +280,10 @@ function start() {
 	// 	initial_arr[i][j] = val_str
 	// })
 	initial_arr = getCurrentTileState()
-	if (isDebug) console.log(initial_arr)
+	if (isDebug) {
+		console.log(initial_arr)
+		console.log(goal_arr)
+	}
 
 	var init = new ANode(0,initial_arr,emptyTileRow,emptyTileCol,0)
 	var goal = new ANode(0, goal_arr,2,2,0)
@@ -285,7 +292,7 @@ function start() {
 	var startTime = new Date()
 	var result = astar.execute()
 	var endTime = new Date()
-	alert("Completed in " + (endTime - startTime) + "milliseconds.")
+	if(!isDebug)	alert("Completed in " + (endTime - startTime) + "milliseconds.")
 
 	var panel = document.getElementById('panel')
 	// console.log(result)	
@@ -376,6 +383,8 @@ AStar.prototype.inConflict = function(index, a,b, indexA, indexB, dimension) {
 
 step = 0
 function showSolution() {
+	// console.log("clicked")
+	// console.log(step)
 	var move = ''
 	if (step<solution.length) {
 
@@ -383,19 +392,20 @@ function showSolution() {
 			case "R":
 				move = (emptyTileRow).toString() + ',' + (emptyTileCol+1).toString()
 				break
-				case "L":
-					move = (emptyTileRow).toString() + ',' + (emptyTileCol-1).toString()
-					break
-					case "U":
-						move = (emptyTileRow-1).toString() + ',' + (emptyTileCol).toString()
-						break
-						case "D":
-							move = (emptyTileRow+1).toString() + ',' + (emptyTileCol).toString()
-							break
-						}
-						$("div[data-pos='" + move + "']").click()
-						panel.innerHTML += 'Step: ' + step + ' -> ' + solution[step] + ','
-						step++
+			case "L":
+				move = (emptyTileRow).toString() + ',' + (emptyTileCol-1).toString()
+				break
+			case "U":
+				move = (emptyTileRow-1).toString() + ',' + (emptyTileCol).toString()
+				break
+			case "D":
+				move = (emptyTileRow+1).toString() + ',' + (emptyTileCol).toString()
+				break
+			}
+			if(isDebug) console.log("Step: "+ move)
+		$("div[data-pos='" + move + "']").click()
+		panel.innerHTML += 'Step: ' + step + ' -> ' + solution[step] + ','
+		step++
 		}
 }
 
@@ -446,13 +456,15 @@ function shuffleTiles() {
 	var shuffleCounter = 0;
 	var lastShuffled;
 	isShuffle = true
+	isWin = false
+	step = 0
 	while (shuffleCounter < 20) {
 		emptyPos = $("#empty").attr("data-pos")
 		validTiles = movementMap(emptyPos)
 		randomPos = validTiles[Math.floor(Math.random()*validTiles.length)]
-		console.log($("div[data-pos='"+randomPos+"']").find("span").text())
+		if (isDebug) console.log($("div[data-pos='"+randomPos+"']").find("span").text())
 		if (lastShuffled != randomPos) {
-			console.log(randomPos)
+			if (isDebug) console.log(randomPos)
 			shuffleCounter++;
 			lastShuffled = randomPos
 			$("div[data-pos='"+randomPos+"']").click()
@@ -469,16 +481,16 @@ function checkWinCondition() {
 			if (tilePos[i][j] != goal_arr[i][j]) return false
 		}
 	}
-	console.log(tilePos)
+	// console.log(tilePos)
 	return true
 }
 
 function checkWinState() {
 	isWin = checkWinCondition()
-	if (isDebug) isWin = true
+	// if (isDebug) isWin = true
 	if (isWin == true) {
 		var winConfetti = confetti.create(grid, {resize: true})
-		grid.style.zIndex=2
+		// grid.style.zIndex=2
 		console.log("Win!!!")
 		winConfetti({spread: 180, ticks: 500})
 		setTimeout(() => {
